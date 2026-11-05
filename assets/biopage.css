@@ -1,4 +1,4 @@
-/* Bio pages: shared layout + 8 looks (body class d-<id>). --p/--a from the palette, html[data-mode] light|dark. */
+/* Bio pages: shared layout + 18 looks (body class d-<id>). --p/--a from the palette, html[data-mode] light|dark. */
 html{--bg:#fff;--ink:#14161c;--mut:#5b6170;--card:#fff;--line:#e5e7eb;color-scheme:light}
 html[data-mode="dark"]{--bg:#0d0f14;--ink:#eef0f4;--mut:#a6adbb;--card:#171a21;--line:#2a2f3a;color-scheme:dark}
 *{box-sizing:border-box}[hidden]{display:none!important}
@@ -122,3 +122,115 @@ html[data-mode="dark"] .d-pastel .lnk a,html[data-mode="dark"] .d-pastel .soc a{
 .d-channel .lnk a.first{background:var(--p);color:#fff;border:0}
 html[data-mode="dark"] .d-channel .lnk a.first{color:#0f0f0f}
 .d-channel .fv{border-radius:14px}
+
+/* ---- added 2026-11-05: list features (shows, products) and 10 more looks ---- */
+.shows,.prods{display:block;padding:14px}
+.shows small,.prods small{margin:0 0 8px 4px}
+.shows ul,.prods ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.shows a,.shows .nolink{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--p) 10%,var(--card));color:var(--ink);text-decoration:none;min-height:52px;border:0}
+.shows .sd{font-weight:800;color:var(--p);min-width:86px;font-size:14px;text-transform:uppercase;letter-spacing:.03em}
+.shows .sv{flex:1;font-size:15px;overflow-wrap:anywhere}.shows a .ic{opacity:.6}
+.prods ul{grid-template-columns:1fr 1fr}
+.prods a,.prods .nolink{display:flex;flex-direction:column;gap:4px;padding:10px;border-radius:14px;background:color-mix(in srgb,var(--p) 8%,var(--card));color:var(--ink);text-decoration:none;height:100%;border:0}
+.prods .pp{display:grid;place-items:center;aspect-ratio:4/3;border-radius:10px;background:linear-gradient(135deg,var(--p),var(--a));color:#fff;margin-bottom:4px}
+.prods .pp .ic{width:30%;height:30%}.prods b{font-size:14px;line-height:1.3;overflow-wrap:anywhere}.prods .pr{font-weight:800;color:var(--p)}
+@media (max-width:300px){.prods ul{grid-template-columns:1fr}}
+
+/* always-dark looks: the stage, the screen, the board and the night sky stay dark in light mode too */
+.d-spotlight,.d-arcade,.d-chalk,.d-cosmos{--bg:#101014;--ink:#f3f1ec;--mut:#b6b3ad;--card:#1b1b22;--line:#33333d;color-scheme:dark}
+
+/* Spotlight */
+.d-spotlight{background:radial-gradient(60% 45% at 50% 0%,color-mix(in srgb,var(--p) 38%,transparent),transparent 70%),
+  repeating-linear-gradient(0deg,#16120f 0 26px,#1d1814 26px 28px),#16120f}
+.d-spotlight .av{box-shadow:0 0 0 4px #16120f,0 0 0 6px var(--p),0 0 60px 10px color-mix(in srgb,var(--p) 45%,transparent)}
+.d-spotlight h1{font-weight:400;letter-spacing:.02em;color:var(--p)}
+.d-spotlight .lnk a{background:#0f0d0b;border:2px solid color-mix(in srgb,var(--p) 50%,#333);border-radius:4px;text-transform:uppercase;letter-spacing:.05em;font-size:15px}
+.d-spotlight .lnk a.first{background:var(--p);color:#16120f;border-color:var(--p)}
+.d-spotlight .shows{background:#0f0d0b;border-color:#3a3029}
+
+/* Groove */
+.d-groove{background:repeating-linear-gradient(-55deg,color-mix(in srgb,var(--p) 14%,#fff) 0 40px,color-mix(in srgb,var(--a) 12%,#fff) 40px 80px)}
+html[data-mode="dark"] .d-groove{background:repeating-linear-gradient(-55deg,color-mix(in srgb,var(--p) 22%,#0d0b14) 0 40px,color-mix(in srgb,var(--a) 16%,#0d0b14) 40px 80px)}
+.d-groove .av{border-radius:26px;transform:rotate(-6deg);border:5px solid var(--card);box-shadow:10px 10px 0 var(--a)}
+.d-groove h1{font-weight:400;font-size:clamp(28px,7vw,40px);transform:rotate(-2deg)}
+.d-groove .lnk a{border-radius:99px;border:0;background:var(--card);box-shadow:0 8px 0 -2px color-mix(in srgb,var(--p) 60%,transparent)}
+.d-groove .lnk a.first{background:var(--p);color:#fff}
+.d-groove .fv{transform:rotate(1deg);border:0;box-shadow:0 18px 40px -20px var(--p)}
+
+/* Arcade */
+.d-arcade{background:linear-gradient(transparent 0 calc(100% - 1px),color-mix(in srgb,var(--p) 25%,transparent) 0) 0 0/100% 32px,
+  linear-gradient(90deg,transparent 0 calc(100% - 1px),color-mix(in srgb,var(--p) 25%,transparent) 0) 0 0/32px 100%,#07060f}
+.d-arcade h1{font-size:clamp(15px,4.6vw,20px);line-height:1.5;color:var(--p);text-shadow:0 0 12px var(--p)}
+.d-arcade .av{border-radius:6px;border:3px solid var(--p);box-shadow:0 0 20px var(--p);image-rendering:pixelated}
+.d-arcade .lnk a{border-radius:4px;background:#0d0b1c;border:2px solid var(--a);box-shadow:4px 4px 0 var(--a)}
+.d-arcade .lnk a.first{border-color:var(--p);box-shadow:4px 4px 0 var(--p);color:var(--p)}
+.d-arcade .fv{border:2px solid var(--p);box-shadow:0 0 24px -4px var(--p)}.d-arcade .fv small{color:var(--p)}
+.d-arcade .soc a{border-radius:6px;background:#0d0b1c;border:1px solid var(--a)}
+
+/* Chalkboard */
+.d-chalk{background:radial-gradient(80% 60% at 30% 20%,#2e5143,transparent),#203b31}
+.d-chalk #bp{background:transparent}
+.d-chalk h1{font-size:clamp(30px,8vw,42px);color:var(--p)}
+.d-chalk .av{background:#fff3;color:#fff;border:3px dashed var(--p)}
+.d-chalk .bio{color:#e3ece6}
+.d-chalk .lnk a{background:transparent;border:2px solid rgba(255,255,255,.55);border-radius:6px 14px 8px 16px;color:#fff}
+.d-chalk .lnk a.first{border-color:var(--p);color:var(--p)}
+.d-chalk .soc a{background:transparent;border:2px solid rgba(255,255,255,.4)}
+.d-chalk .bf{color:#b9cbbf}
+
+/* Passport */
+.d-passport{background:linear-gradient(color-mix(in srgb,var(--p) 8%,transparent) 1px,transparent 1px) 0 0/22px 22px,linear-gradient(90deg,color-mix(in srgb,var(--p) 8%,transparent) 1px,transparent 1px) 0 0/22px 22px,#f6f0e3}
+html[data-mode="dark"] .d-passport{background:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px) 0 0/22px 22px,linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px) 0 0/22px 22px,#15130f}
+.d-passport h1{font-size:clamp(34px,9vw,46px)}
+.d-passport .av{border-radius:12px;border:6px solid var(--card);box-shadow:0 10px 24px -10px rgba(0,0,0,.4);transform:rotate(3deg)}
+.d-passport .lnk a{background:var(--card);border:2px dashed color-mix(in srgb,var(--p) 55%,transparent);border-radius:10px}
+.d-passport .lnk a.first{border-style:solid;border-color:var(--a);color:var(--a)}
+.d-passport .fv{border:2px dashed var(--p)}
+
+/* Film */
+.d-film{background:#f5f5f4}html[data-mode="dark"] .d-film{background:#0c0c0c}
+.d-film #bp{border-left:14px solid #111;border-right:14px solid #111;background:var(--bg);min-height:100vh;
+  -webkit-mask:none;box-shadow:inset 0 0 0 1px var(--line)}
+.d-film #bp::before,.d-film #bp::after{content:'';position:absolute;top:0;bottom:0;width:14px;background:repeating-linear-gradient(#111 0 6px,#f5f5f4 6px 14px,#111 14px 22px)}
+.d-film #bp::before{left:-14px}.d-film #bp::after{right:-14px}
+.d-film h1{font-weight:700;font-size:clamp(30px,8vw,40px);letter-spacing:-.01em}
+.d-film .av{border-radius:4px;filter:grayscale(.2)}
+.d-film .tiles{gap:3px;padding:3px;background:#111;border:0;border-radius:4px}.d-film .tiles i{border-radius:0}.d-film .tiles p{color:#ccc}
+.d-film .lnk a{border-radius:0;background:transparent;border:1px solid var(--ink);letter-spacing:.04em;text-transform:uppercase;font-size:14px}
+.d-film .lnk a.first{background:var(--ink);color:var(--bg)}
+
+/* Care */
+.d-care{background:linear-gradient(180deg,color-mix(in srgb,var(--p) 10%,#fff),#fff 40%)}
+html[data-mode="dark"] .d-care{background:linear-gradient(180deg,color-mix(in srgb,var(--p) 18%,#0d0f14),#0d0f14 40%)}
+.d-care .av{background:var(--p);box-shadow:0 0 0 6px color-mix(in srgb,var(--p) 18%,transparent)}
+.d-care .bio{font-size:17px}
+.d-care .lnk a{border-radius:14px;justify-content:flex-start;border-left:4px solid var(--p)}
+.d-care .lnk a.first{background:var(--p);color:#fff;border-color:var(--p)}
+html[data-mode="dark"] .d-care .lnk a.first{color:#0d0f14}
+
+/* Cosmos */
+.d-cosmos{background:radial-gradient(1.5px 1.5px at 20% 30%,#fff,transparent),radial-gradient(1px 1px at 70% 20%,#fff,transparent),radial-gradient(1.5px 1.5px at 40% 70%,#fff,transparent),
+  radial-gradient(1px 1px at 85% 60%,#fff,transparent),radial-gradient(1px 1px at 10% 85%,#fff,transparent),radial-gradient(1.2px 1.2px at 60% 90%,#fff,transparent),
+  radial-gradient(60% 40% at 50% 0%,color-mix(in srgb,var(--a) 35%,transparent),transparent),#0b0b1e}
+.d-cosmos .av{box-shadow:0 0 0 3px #0b0b1e,0 0 0 5px var(--p),0 0 50px 8px color-mix(in srgb,var(--p) 40%,transparent)}
+.d-cosmos h1{color:var(--p);letter-spacing:.04em}
+.d-cosmos .lnk a{background:rgba(255,255,255,.05);border:1px solid color-mix(in srgb,var(--p) 50%,transparent);border-radius:99px}
+.d-cosmos .lnk a.first{background:var(--p);color:#0b0b1e}
+.d-cosmos .soc a{background:rgba(255,255,255,.06);border:1px solid color-mix(in srgb,var(--p) 40%,transparent)}
+
+/* Shopfront */
+.d-shopfront{background:color-mix(in srgb,var(--p) 8%,#fff)}html[data-mode="dark"] .d-shopfront{background:#131017}
+.d-shopfront .cover{display:block;height:46px;margin:-32px -18px 18px;background:repeating-linear-gradient(90deg,var(--p) 0 36px,#fff 36px 72px);border-radius:0 0 18px 18px}
+html[data-mode="dark"] .d-shopfront .cover{background:repeating-linear-gradient(90deg,var(--p) 0 36px,#1f1a24 36px 72px)}
+.d-shopfront .av{border-radius:24px}
+.d-shopfront .lnk a{border-radius:16px;border:2px solid color-mix(in srgb,var(--p) 30%,var(--line))}
+.d-shopfront .lnk a.first{background:#25D366;border-color:#25D366;color:#073d1f}
+.d-shopfront .prods{border:0;background:transparent;padding:0}
+
+/* Duo */
+.d-duo{background:radial-gradient(40% 30% at 30% 12%,color-mix(in srgb,var(--p) 30%,transparent),transparent),radial-gradient(40% 30% at 72% 14%,color-mix(in srgb,var(--a) 28%,transparent),transparent),#fffaf5}
+html[data-mode="dark"] .d-duo{background:radial-gradient(40% 30% at 30% 12%,color-mix(in srgb,var(--p) 30%,transparent),transparent),radial-gradient(40% 30% at 72% 14%,color-mix(in srgb,var(--a) 26%,transparent),transparent),#120f0e}
+.d-duo .av{width:128px;height:128px;box-shadow:-14px 0 0 0 color-mix(in srgb,var(--p) 70%,transparent),14px 0 0 0 color-mix(in srgb,var(--a) 70%,transparent)}
+.d-duo h1{font-weight:400;font-size:clamp(28px,8vw,38px)}
+.d-duo .lnk a{border-radius:99px;border:0;box-shadow:0 10px 26px -18px var(--p)}
+.d-duo .lnk li:nth-child(odd) a.first,.d-duo .lnk a.first{background:linear-gradient(90deg,var(--p),var(--a));color:#fff}

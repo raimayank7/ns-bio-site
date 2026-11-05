@@ -49,6 +49,17 @@
     if (B.feature === 'video') f = a(url(d.feature && d.feature[1]) || '#', '<span class="vthumb"><i>' + ic('play') + '</i></span><span class="vt"><small>' + ic('youtube') + 'Newest video</small><b>' + esc(ft || 'Your newest video') + '</b></span>', 'feat fv');
     else if (B.feature === 'release') f = a(url(d.feature && d.feature[1]) || '#', '<span class="cov">' + ic('music') + '</span><span class="vt"><small>Latest release</small><b>' + esc(ft || 'Your latest song') + '</b><span class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span>', 'feat fr');
     else if (B.feature === 'tiles') f = '<div class="feat tiles" aria-label="Artwork"><i></i><i></i><i></i><i></i><i></i><i></i><p>' + (sample ? 'Sample artwork' : 'Your work appears here') + '</p></div>';
+    else if (B.feature === 'shows' || B.feature === 'products') {
+      /* list features: the visitor's own rows if any, otherwise the sample rows (still marked as samples) */
+      var rows = (d[B.feature] && d[B.feature].length ? d[B.feature] : B.sample[B.feature]) || [], own = !!(d[B.feature] && d[B.feature].length);
+      f = '<div class="feat ' + (B.feature === 'shows' ? 'shows' : 'prods') + '">' + (B.feature === 'shows' ? '<small>' + ic('calendar') + 'Upcoming shows</small>' : '<small>' + ic('tag') + 'Shop</small>') + '<ul>' +
+        rows.map(function (r) {
+          var href = url(r[2]) || (own ? '' : '#');
+          var inner = B.feature === 'shows' ? '<span class="sd">' + esc(r[0]) + '</span><span class="sv">' + esc(r[1]) + '</span>' + ic('right')
+            : '<span class="pp">' + ic('cart') + '</span><b>' + esc(r[0]) + '</b><span class="pr">' + esc(r[1]) + '</span>';
+          return '<li>' + (href ? a(href, inner, '') : '<span class="nolink">' + inner + '</span>') + '</li>';
+        }).join('') + '</ul></div>';
+    }
     root.innerHTML =
       '<header class="top"><div class="cover" aria-hidden="true"></div><div class="av">' + av + '</div>' +
       '<div class="who"><h1>' + esc(d.name || 'Your name') + '</h1>' + (d.handle ? '<p class="handle">@' + esc(String(d.handle).replace(/^@/, '')) + '</p>' : '') + '</div></header>' +

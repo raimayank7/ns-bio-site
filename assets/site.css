@@ -159,3 +159,4 @@ dialog.ord::backdrop{background:rgba(6,16,15,.6);backdrop-filter:blur(3px)}
 .ord .note{font-size:13px;color:var(--mut);margin:0}
 .ord .btn.wa{width:100%}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+.more{margin-top:28px;text-align:center}.more .btn .ic{margin-left:4px}
