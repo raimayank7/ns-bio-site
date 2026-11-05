@@ -128,4 +128,26 @@
     });
     if (innerWidth < 760) $('button[data-dev="desk"]').setAttribute('aria-pressed', 'true');
   }
+
+  /* one sponsor card on showroom pages ([data-sponsor]), from Share's master list; never our own, family or website-builder offers */
+  var sp = $('[data-sponsor]');
+  if (sp && window.fetch) {
+    var RIVAL = /website\s?builder|wix|wordpress|squarespace|shopify|hostinger|godaddy|dukaan|webflow|weebly|linktree|beacons/i;
+    var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); };
+    var india = /Calcutta|Kolkata/.test((Intl.DateTimeFormat().resolvedOptions() || {}).timeZone || '');
+    fetch('https://share.groupchaton.com/promos.json', { mode: 'cors' }).then(function (r) { return r.json(); }).then(function (j) {
+      var list = (j.promos || []).filter(function (p) {
+        return p && /^https:\/\//.test(p.href || '') && !p.own && !p.family && (!p.india || india) && !RIVAL.test([p.title, p.line, p.href].join(' '));
+      });
+      if (!list.length) return;
+      var p = list[Math.floor(Math.random() * list.length)];
+      var img = p.imgs && p.imgs.length ? p.imgs[Math.floor(Math.random() * p.imgs.length)] : '';
+      sp.innerHTML = '<a class="sponsor" href="' + esc(p.href) + '" target="_blank" rel="sponsored noopener">' +
+        (img ? '<img src="' + esc(img) + '" alt="" loading="lazy" width="72" height="72">' : '') +
+        '<span><small>Sponsored</small><b>' + esc(p.title) + '</b>' + (p.line ? '<span>' + esc(p.line) + '</span>' : '') +
+        (p.cta ? '<em>' + esc(p.cta) + ' →</em>' : '') + '</span></a>' +
+        '<p class="sp-own">Want your business on this card? <a href="https://promo.niveshsahayak.in/">Promote it here</a></p>';
+      sp.hidden = false;
+    }).catch(function () {});
+  }
 })();

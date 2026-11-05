@@ -160,3 +160,12 @@ dialog.ord::backdrop{background:rgba(6,16,15,.6);backdrop-filter:blur(3px)}
 .ord .btn.wa{width:100%}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 .more{margin-top:28px;text-align:center}.more .btn .ic{margin-left:4px}
+/* sponsor card (showroom pages only, filled by site.js) */
+.sponsor-slot{max-width:780px;margin:8px auto 40px}
+.sponsor{display:flex;gap:14px;align-items:center;background:var(--s1);border:1px dashed var(--line);border-radius:var(--r);padding:12px 14px;text-decoration:none;color:var(--ink)}
+.sponsor img{width:72px;height:72px;object-fit:cover;border-radius:12px;flex:none}
+.sponsor>span{min-width:0}.sponsor small{display:block;color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.sponsor b{display:block}.sponsor span span{display:block;color:var(--mut);font-size:15px}
+.sponsor em{font-style:normal;color:var(--p);font-weight:700;font-size:15px}
+.sp-own{margin:8px 2px 0;font-size:14px;color:var(--mut)}
+@media print{.sponsor-slot{display:none}}
