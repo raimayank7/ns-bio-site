@@ -169,3 +169,87 @@ dialog.ord::backdrop{background:rgba(6,16,15,.6);backdrop-filter:blur(3px)}
 .sponsor em{font-style:normal;color:var(--p);font-weight:700;font-size:15px}
 .sp-own{margin:8px 2px 0;font-size:14px;color:var(--mut)}
 @media print{.sponsor-slot{display:none}}
+/* viewer: test this design (ads check, screen sizes, SEO check) */
+.vtest{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 16px;background:var(--s1);border-bottom:1px solid var(--line);font-size:14px}
+.vtest>span{color:var(--mut);font-weight:600}
+.vtest button{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:6px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:600 14px/1 inherit;font-family:inherit;cursor:pointer}
+.vtest button .ic{width:16px;height:16px}
+.vtest button[aria-pressed="true"]{background:var(--p);border-color:var(--p);color:var(--on)}
+.vnote{margin:0;padding:8px 16px;background:var(--as);color:var(--ink);font-size:14px;border-bottom:1px solid var(--line)}
+.pg-view .vstage{height:calc(100dvh - 72px - 66px - 55px)}
+.vrep-in{padding:18px 20px 22px}.vrep-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.vrep h2{margin:0;font-size:20px}.vrep-body{font-size:15px}.vrep-body p{margin:6px 0}
+.vrep-sum{font-weight:700}.vrep ul{list-style:none;margin:10px 0 0;padding:0}
+.vrep li{display:grid;grid-template-columns:24px 1fr;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
+.vrep li b{display:block}.vrep li small{display:block;color:var(--mut);font-size:13px}
+.vrep .ok,.vrep .no,.vrep .inf{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 13px/1 system-ui;color:#fff}
+.vrep .ok{background:#15803d}.vrep .no{background:#b91c1c}.vrep .inf{background:#475569}
+.vrep table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}.vrep th,.vrep td{text-align:left;padding:7px 6px;border-top:1px solid var(--line)}
+.vrep td.r{color:#15803d;font-weight:700}.vrep td.w{color:#b91c1c;font-weight:700}
+:root[data-theme="dark"] .vrep td.r{color:#4ade80}:root[data-theme="dark"] .vrep td.w{color:#f87171}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .vrep td.r{color:#4ade80}:root:not([data-theme="light"]) .vrep td.w{color:#f87171}}
+@media (max-width:760px){.vtest>span{display:none}.vtest{padding:6px 12px}.vnote{padding:6px 12px;font-size:13px}.vtest button{flex:1 1 0;justify-content:center;padding:6px 8px;font-size:13px}.pg-view .vstage{height:calc(100dvh - 72px - 118px - 52px)}}
+/* ===== phone layout (up to 600 px): one-thumb showroom. Desktop and tablet unchanged. ===== */
+.vmore,.vsheet .vs-l{display:none}
+@media (max-width:600px){
+  body{font-size:16px}
+  .hdin{min-height:60px}
+  html{scroll-padding-top:70px}
+  .sec{padding:40px 0}.sub{margin-bottom:20px}
+  /* business types: compact two-up tiles instead of one long column */
+  .tgrid{grid-template-columns:1fr 1fr;gap:10px}
+  .tcard{padding:12px;gap:2px;min-height:96px;justify-content:flex-start}
+  .tcard .ic{width:34px;height:34px;padding:7px;margin-bottom:6px}
+  .tcard b{font-size:15px;line-height:1.25}.tcard small{font-size:13px}
+  /* designs: a swipeable gallery, next card peeks in */
+  .dgrid:has(>:nth-child(2)),.bgrid:has(>:nth-child(2)){display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
+    margin:0 -20px;padding:4px 20px 16px;scroll-padding:0 20px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .dgrid:has(>:nth-child(2))::-webkit-scrollbar,.bgrid:has(>:nth-child(2))::-webkit-scrollbar{display:none}
+  .dgrid:has(>:nth-child(2))>*,.bgrid:has(>:nth-child(2))>*{flex:0 0 84%;scroll-snap-align:start}
+  .dcard:hover,.bcard:hover,.tcard:hover{transform:none}
+  .dbody{padding:16px}.dbody h2,.dbody h3{font-size:21px}
+  .dact .btn{flex:1 1 auto;min-height:46px}
+  .bcard{grid-template-columns:104px minmax(0,1fr);gap:14px;padding:14px}
+  .bcard .dact .btn{white-space:normal;text-align:center;min-height:44px;padding:8px 12px}
+  /* our work, footer, small links: full 44 px taps */
+  .work li{padding:18px}.work a{min-height:44px}
+  .ft{padding:36px 0 calc(24px + env(safe-area-inset-bottom))}
+  .fgrid{grid-template-columns:1fr 1fr;gap:8px 16px}.fgrid>div:first-child{grid-column:1/-1}
+  .ft li{margin:0}.ft li a{display:flex;align-items:center;min-height:44px}
+  .base{flex-direction:column;margin-top:20px}
+  .crumb a,.sub a,.small a{display:inline-flex;align-items:center;min-height:44px}
+  .link{min-height:44px}
+  .hnote{gap:4px 14px}
+  .pcard{padding:22px}
+  summary{min-height:44px;align-items:center;padding:14px 0}
+  /* live-demo viewer: slim top bar, order button at thumb height, everything else in a bottom sheet */
+  .pg-view .hd{display:none}
+  .vbar{flex-wrap:nowrap;gap:8px;padding:8px 12px;min-height:60px}
+  .vt h1{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vt small{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .vbar .sws,.vbar [data-vmode],.pg-view>main>.vtest,.pg-view main>.vtest{display:none}
+  .vmore{display:grid}
+  .vbar .btn.pri{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:35;min-height:52px;font-size:17px;flex:none;box-shadow:0 14px 30px -12px rgba(0,0,0,.55)}
+  .pg-view .vstage,.vstage{height:calc(100dvh - 60px - 72px);min-height:0}
+  .pg-view .vnote{font-size:13px}
+  dialog.vsheet{margin:auto 0 0;width:100%;max-width:100%;max-height:85dvh;border-radius:24px 24px 0 0;padding-bottom:env(safe-area-inset-bottom)}
+  dialog.vsheet[open]{animation:vsUp .22s ease-out}
+  @keyframes vsUp{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+  .vsheet .vs-l{display:block;margin:14px 0 8px;font-weight:700;font-size:14px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+  .vsheet .vs-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-weight:600}
+  .vsheet .sws{display:flex;gap:10px;padding:6px;width:max-content}
+  .vsheet .sw{width:48px;height:48px;min-height:48px}.vsheet .sw::before{width:28px;height:28px}
+  .vsheet [data-vmode],.vsheet .hide-sm{display:grid}
+  .vsheet .vtest{display:grid;grid-template-columns:1fr;gap:8px;padding:0;border:0;background:none}
+  .vsheet .vtest>span{display:none}
+  .vsheet .vtest button{min-height:48px;justify-content:flex-start;padding:0 14px;font-size:15px;flex:none}
+}
+@media (max-width:600px) and (prefers-reduced-motion:reduce){dialog.vsheet[open]{animation:none}}
+@media (max-width:600px){
+  .brand{min-height:44px}
+  .sws .sw{width:44px;min-height:44px}
+  .hint a{display:inline-block;padding:13px 4px;margin:-13px -4px}
+  .fgrid>div:has(ul>li:nth-child(8)){grid-column:1/-1}
+  .ft ul:has(>li:nth-child(8)){display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:10px}
+  .bgrid:has(>:nth-child(2))>*{flex-basis:88%}
+}
+@media (max-width:360px){.dgrid:has(>:nth-child(2)),.bgrid:has(>:nth-child(2)){margin:0 -14px;padding-left:14px;padding-right:14px;scroll-padding:0 14px}}

@@ -127,6 +127,134 @@
       if (e.origin === location.origin && e.data && e.data.nsd === 'mode' && (dark() ? 'dark' : 'light') !== e.data.mode) tt.click();
     });
     if (innerWidth < 760) $('button[data-dev="desk"]').setAttribute('aria-pressed', 'true');
+
+    /* test this design: ads check (sample ad places drawn inside the demo), screen sizes, SEO check */
+    var ads = false, adBtn = $('[data-test="ads"]'), rep = $('dialog.vrep');
+    function sendAds() { if (fr.contentWindow) fr.contentWindow.postMessage({ nsd: 'ads', on: ads }, location.origin); }
+    fr.addEventListener('load', function () { if (ads) sendAds(); });
+    if (adBtn) adBtn.addEventListener('click', function () {
+      ads = !ads;
+      adBtn.setAttribute('aria-pressed', ads ? 'true' : 'false');
+      $('[data-adnote]').hidden = !ads;
+      sendAds();
+    });
+    function row(ok, title, note) {
+      var c = ok === true ? ['ok', '✓'] : ok === false ? ['no', '✗'] : ['inf', 'i'];
+      return '<li><span class="' + c[0] + '" aria-label="' + (ok === true ? 'Passed' : ok === false ? 'Needs work' : 'Note') + '">' + c[1] + '</span><div><b>' + title + '</b>' + (note ? '<small>' + note + '</small>' : '') + '</div></li>';
+    }
+    function report(title, html) {
+      if (!rep) return;
+      $('#vrep-h', rep).textContent = title;
+      $('.vrep-body', rep).innerHTML = html;
+      if (!rep.open) rep.showModal();
+    }
+    if (rep) $('[data-close]', rep).addEventListener('click', function () { rep.close(); });
+
+    function demoUrl() { return '/demo/' + cur.design + '/?c=' + cur.c + '&mode=' + (dark() ? 'dark' : 'light'); }
+    var SIZES = [[320, 'Small phone'], [375, 'Phone'], [414, 'Large phone'], [768, 'Tablet'], [1024, 'Small laptop'], [1366, 'Computer'], [1920, 'Wide screen']];
+    function checkSize(w) {
+      return new Promise(function (res) {
+        var f = document.createElement('iframe');
+        f.setAttribute('aria-hidden', 'true'); f.tabIndex = -1;
+        f.style.cssText = 'position:fixed;left:-30000px;top:0;height:900px;border:0;visibility:hidden;width:' + w + 'px';
+        var done = false;
+        function fin(r) { if (done) return; done = true; f.remove(); res(r); }
+        f.onload = function () {
+          setTimeout(function () {
+            try {
+              var d = f.contentDocument, el = d.documentElement, small = 0, minF = 99, tiny = 0;
+              var wk = d.createTreeWalker(d.body, NodeFilter.SHOW_TEXT);
+              while (wk.nextNode()) {
+                var t = wk.currentNode, p = t.parentElement;
+                if (!t.nodeValue.trim() || !p || !p.getClientRects().length || p.closest('.smp,.nsp,.nsad')) continue;
+                var fs = parseFloat(getComputedStyle(p).fontSize);
+                if (fs < minF) minF = fs;
+                if (fs < 12) small++;
+              }
+              Array.prototype.forEach.call(d.querySelectorAll('main a, main button, header a, header button'), function (b) {
+                var r = b.getBoundingClientRect();
+                if (r.width && r.height && !b.closest('p') && (r.height < 32 || r.width < 32)) tiny++;
+              });
+              fin({ w: w, side: el.scrollWidth > el.clientWidth + 1, minF: Math.round(minF), small: small, tiny: tiny });
+            } catch (e) { fin({ w: w, err: true }); }
+          }, 900);
+        };
+        setTimeout(function () { fin({ w: w, err: true }); }, 15000);
+        f.src = demoUrl();
+        document.body.appendChild(f);
+      });
+    }
+    var busy = false;
+    $$('[data-test="screens"],[data-test="seo"]').forEach(function (b) {
+      b.addEventListener('click', function () { (b.dataset.test === 'seo' ? seo : screens)(); });
+    });
+    function screens() {
+      if (busy) return; busy = true;
+      report('Screen sizes test', '<p>Opening this design on 7 screen sizes, from a small phone to a wide screen…</p>');
+      var out = [];
+      SIZES.reduce(function (p, s) { return p.then(function () { return checkSize(s[0]).then(function (r) { out.push(r); }); }); }, Promise.resolve()).then(function () {
+        busy = false;
+        var pass = out.filter(function (r) { return !r.err && !r.side && !r.small; }).length;
+        var h = '<p class="vrep-sum">' + pass + ' of ' + out.length + ' screen sizes passed</p>' +
+          '<table><thead><tr><th>Screen</th><th>Fits the width</th><th>Smallest text</th></tr></thead><tbody>';
+        out.forEach(function (r, i) {
+          h += '<tr><td>' + SIZES[i][1] + '<br><small>' + r.w + ' px wide</small></td>' + (r.err ? '<td class="w" colspan="2">Could not check</td>' :
+            '<td class="' + (r.side ? 'w">No, scrolls sideways' : 'r">Yes') + '</td><td class="' + (r.small ? 'w' : 'r') + '">' + r.minF + ' px</td>') + '</tr>';
+        });
+        h += '</tbody></table><p><small>Checked on this design with its sample content. The same layout goes into your Blogger theme, so your site behaves the same way.</small></p>';
+        report('Screen sizes test', h);
+      });
+    }
+    function seo() {
+      var d, w;
+      try { d = fr.contentDocument; w = fr.contentWindow; } catch (e) {}
+      if (!d || !d.body) { report('SEO check', '<p>The design is still loading. Try again in a moment.</p>'); return; }
+      var L = [], pass = 0, tot = 0;
+      function add(ok, t, n) { if (ok === true || ok === false) { tot++; if (ok) pass++; } L.push(row(ok, t, n)); }
+      var meta = function (n) { var m = d.querySelector('meta[name="' + n + '"]'); return m ? m.content : ''; };
+      var h1 = d.querySelectorAll('h1').length;
+      add(!!d.title, 'Page title', 'Blogger writes it from your blog name and each page or post title.');
+      add(!!meta('description'), 'Meta description', 'On your site: Blogger › Settings › Meta tags › Search description.');
+      add(/width=device-width/.test(meta('viewport')), 'Made for mobile', 'Google indexes the phone version first.');
+      add(h1 === 1, 'One main heading (H1)', h1 === 1 ? 'Exactly one, as Google prefers.' : h1 + ' found.');
+      var lv = 0, jump = 0;
+      Array.prototype.forEach.call(d.querySelectorAll('h1,h2,h3,h4,h5,h6'), function (x) { var n = +x.tagName[1]; if (lv && n > lv + 1) jump++; lv = n; });
+      add(!jump, 'Headings in order', jump ? jump + ' heading level(s) skipped.' : 'H1 › H2 › H3, no levels skipped.');
+      var imgs = d.querySelectorAll('img'), noAlt = Array.prototype.filter.call(imgs, function (i) { return !i.hasAttribute('alt'); }).length;
+      add(!noAlt, 'Pictures have alt text', imgs.length ? (noAlt ? noAlt + ' of ' + imgs.length + ' missing.' : 'All ' + imgs.length + ' pictures.') : 'Your own photos get your business name as alt text.');
+      var empty = Array.prototype.filter.call(d.querySelectorAll('a,button'), function (a) { return !(a.textContent.trim() || a.getAttribute('aria-label') || a.querySelector('img[alt]:not([alt=""])')); }).length;
+      add(!empty, 'Every link and button has a name', empty ? empty + ' without a name.' : 'Helps Google and screen readers.');
+      add(!!d.documentElement.lang, 'Page language set', 'lang="' + (d.documentElement.lang || '') + '"');
+      var ld = Array.prototype.map.call(d.querySelectorAll('script[type="application/ld+json"]'), function (s) { try { return JSON.parse(s.textContent)['@type']; } catch (e) { return ''; } }).filter(Boolean);
+      add(ld.length > 0, 'Business details for Google (schema)', ld.length ? ld.join(', ') + ': name, phone, address and hours.' : 'None found.');
+      var kb = 0;
+      try { (w.performance.getEntriesByType('navigation').concat(w.performance.getEntriesByType('resource'))).forEach(function (e) { kb += (e.transferSize || e.encodedBodySize || 0) / 1024; }); } catch (e) {}
+      if (kb) add(kb < 1500, 'Light page, loads fast', Math.round(kb) + ' KB for the design’s own files (fonts and photos from other servers not counted)' + (kb < 1500 ? '.' : ', try smaller photos.'));
+      add(null, 'This sample is hidden from Google on purpose', 'Samples are marked noindex. Your own site will be open to Google: add it in Google Search Console after it is live.');
+      report('SEO check', '<p class="vrep-sum">' + pass + ' of ' + tot + ' checks passed</p><ul>' + L.join('') + '</ul>');
+    }
+  }
+
+  /* phone viewer: colours, light/dark, full screen and tests live in a bottom sheet (up to 600 px); the same buttons move back on wider screens */
+  var vs = $('dialog.vsheet'), vbtn = $('[data-vsheet]');
+  if (vs && vbtn) {
+    var phoneMq = matchMedia('(max-width:600px)');
+    var parts = [['c', $('.vbar .sws')], ['m', $('[data-vmode]')], ['f', $('.vbar a.hide-sm')], ['t', $('.vtest')]].filter(function (p) { return p[1]; })
+      .map(function (p) { return { slot: $('[data-vs="' + p[0] + '"]', vs), el: p[1], home: p[1].parentNode, next: p[1].nextSibling }; });
+    var place = function () {
+      parts.forEach(function (p) {
+        if (phoneMq.matches) { if (p.el.parentNode !== p.slot) p.slot.appendChild(p.el); }
+        else if (p.el.parentNode !== p.home) p.home.insertBefore(p.el, p.next && p.next.parentNode === p.home ? p.next : null);
+      });
+      if (!phoneMq.matches && vs.open) vs.close();
+    };
+    place();
+    if (phoneMq.addEventListener) phoneMq.addEventListener('change', place); else phoneMq.addListener(place);
+    vbtn.addEventListener('click', function () { vs.showModal(); vbtn.setAttribute('aria-expanded', 'true'); });
+    vs.addEventListener('close', function () { vbtn.setAttribute('aria-expanded', 'false'); });
+    vs.addEventListener('click', function (e) {
+      if (e.target === vs || e.target.closest('[data-close]') || e.target.closest('[data-test]') || e.target.closest('a')) vs.close();
+    });
   }
 
   /* one sponsor card on showroom pages ([data-sponsor]), from Share's master list; never our own, family or website-builder offers */

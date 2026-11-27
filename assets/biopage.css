@@ -234,3 +234,6 @@ html[data-mode="dark"] .d-duo{background:radial-gradient(40% 30% at 30% 12%,colo
 .d-duo h1{font-weight:400;font-size:clamp(28px,8vw,38px)}
 .d-duo .lnk a{border-radius:99px;border:0;box-shadow:0 10px 26px -18px var(--p)}
 .d-duo .lnk li:nth-child(odd) a.first,.d-duo .lnk a.first{background:linear-gradient(90deg,var(--p),var(--a));color:#fff}
+
+/* phone: bigger tap area for the sample-notice link, no layout change */
+@media (max-width:600px){.smp a{display:inline-block;padding:13px 6px;margin:-13px -6px}}
